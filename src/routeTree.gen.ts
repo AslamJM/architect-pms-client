@@ -14,10 +14,11 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthRoleImport } from './routes/_auth/_role'
-import { Route as AuthRoleDashboardUserImport } from './routes/_auth/_role/dashboard.user'
-import { Route as AuthRoleDashboardPmImport } from './routes/_auth/_role/dashboard.pm'
-import { Route as AuthRoleDashboardAdminImport } from './routes/_auth/_role/dashboard.admin'
+import { Route as AuthDashboardUserImport } from './routes/_auth/dashboard/user'
+import { Route as AuthDashboardPmImport } from './routes/_auth/dashboard/pm'
+import { Route as AuthDashboardAdminImport } from './routes/_auth/dashboard/admin'
+import { Route as AuthDashboardAdminIndexImport } from './routes/_auth/dashboard/admin/index'
+import { Route as AuthDashboardAdminUsersImport } from './routes/_auth/dashboard/admin/users'
 
 // Create/Update Routes
 
@@ -38,27 +39,34 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthRoleRoute = AuthRoleImport.update({
-  id: '/_role',
+const AuthDashboardUserRoute = AuthDashboardUserImport.update({
+  id: '/dashboard/user',
+  path: '/dashboard/user',
   getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthRoleDashboardUserRoute = AuthRoleDashboardUserImport.update({
-  id: '/dashboard/user',
-  path: '/dashboard/user',
-  getParentRoute: () => AuthRoleRoute,
-} as any)
-
-const AuthRoleDashboardPmRoute = AuthRoleDashboardPmImport.update({
+const AuthDashboardPmRoute = AuthDashboardPmImport.update({
   id: '/dashboard/pm',
   path: '/dashboard/pm',
-  getParentRoute: () => AuthRoleRoute,
+  getParentRoute: () => AuthRoute,
 } as any)
 
-const AuthRoleDashboardAdminRoute = AuthRoleDashboardAdminImport.update({
+const AuthDashboardAdminRoute = AuthDashboardAdminImport.update({
   id: '/dashboard/admin',
   path: '/dashboard/admin',
-  getParentRoute: () => AuthRoleRoute,
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthDashboardAdminIndexRoute = AuthDashboardAdminIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthDashboardAdminRoute,
+} as any)
+
+const AuthDashboardAdminUsersRoute = AuthDashboardAdminUsersImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AuthDashboardAdminRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -86,81 +94,92 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_auth/_role': {
-      id: '/_auth/_role'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof AuthRoleImport
-      parentRoute: typeof AuthImport
-    }
-    '/_auth/_role/dashboard/admin': {
-      id: '/_auth/_role/dashboard/admin'
+    '/_auth/dashboard/admin': {
+      id: '/_auth/dashboard/admin'
       path: '/dashboard/admin'
       fullPath: '/dashboard/admin'
-      preLoaderRoute: typeof AuthRoleDashboardAdminImport
-      parentRoute: typeof AuthRoleImport
+      preLoaderRoute: typeof AuthDashboardAdminImport
+      parentRoute: typeof AuthImport
     }
-    '/_auth/_role/dashboard/pm': {
-      id: '/_auth/_role/dashboard/pm'
+    '/_auth/dashboard/pm': {
+      id: '/_auth/dashboard/pm'
       path: '/dashboard/pm'
       fullPath: '/dashboard/pm'
-      preLoaderRoute: typeof AuthRoleDashboardPmImport
-      parentRoute: typeof AuthRoleImport
+      preLoaderRoute: typeof AuthDashboardPmImport
+      parentRoute: typeof AuthImport
     }
-    '/_auth/_role/dashboard/user': {
-      id: '/_auth/_role/dashboard/user'
+    '/_auth/dashboard/user': {
+      id: '/_auth/dashboard/user'
       path: '/dashboard/user'
       fullPath: '/dashboard/user'
-      preLoaderRoute: typeof AuthRoleDashboardUserImport
-      parentRoute: typeof AuthRoleImport
+      preLoaderRoute: typeof AuthDashboardUserImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/dashboard/admin/users': {
+      id: '/_auth/dashboard/admin/users'
+      path: '/users'
+      fullPath: '/dashboard/admin/users'
+      preLoaderRoute: typeof AuthDashboardAdminUsersImport
+      parentRoute: typeof AuthDashboardAdminImport
+    }
+    '/_auth/dashboard/admin/': {
+      id: '/_auth/dashboard/admin/'
+      path: '/'
+      fullPath: '/dashboard/admin/'
+      preLoaderRoute: typeof AuthDashboardAdminIndexImport
+      parentRoute: typeof AuthDashboardAdminImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface AuthRoleRouteChildren {
-  AuthRoleDashboardAdminRoute: typeof AuthRoleDashboardAdminRoute
-  AuthRoleDashboardPmRoute: typeof AuthRoleDashboardPmRoute
-  AuthRoleDashboardUserRoute: typeof AuthRoleDashboardUserRoute
+interface AuthDashboardAdminRouteChildren {
+  AuthDashboardAdminUsersRoute: typeof AuthDashboardAdminUsersRoute
+  AuthDashboardAdminIndexRoute: typeof AuthDashboardAdminIndexRoute
 }
 
-const AuthRoleRouteChildren: AuthRoleRouteChildren = {
-  AuthRoleDashboardAdminRoute: AuthRoleDashboardAdminRoute,
-  AuthRoleDashboardPmRoute: AuthRoleDashboardPmRoute,
-  AuthRoleDashboardUserRoute: AuthRoleDashboardUserRoute,
+const AuthDashboardAdminRouteChildren: AuthDashboardAdminRouteChildren = {
+  AuthDashboardAdminUsersRoute: AuthDashboardAdminUsersRoute,
+  AuthDashboardAdminIndexRoute: AuthDashboardAdminIndexRoute,
 }
 
-const AuthRoleRouteWithChildren = AuthRoleRoute._addFileChildren(
-  AuthRoleRouteChildren,
-)
+const AuthDashboardAdminRouteWithChildren =
+  AuthDashboardAdminRoute._addFileChildren(AuthDashboardAdminRouteChildren)
 
 interface AuthRouteChildren {
-  AuthRoleRoute: typeof AuthRoleRouteWithChildren
+  AuthDashboardAdminRoute: typeof AuthDashboardAdminRouteWithChildren
+  AuthDashboardPmRoute: typeof AuthDashboardPmRoute
+  AuthDashboardUserRoute: typeof AuthDashboardUserRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
-  AuthRoleRoute: AuthRoleRouteWithChildren,
+  AuthDashboardAdminRoute: AuthDashboardAdminRouteWithChildren,
+  AuthDashboardPmRoute: AuthDashboardPmRoute,
+  AuthDashboardUserRoute: AuthDashboardUserRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof AuthRoleRouteWithChildren
+  '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/admin': typeof AuthRoleDashboardAdminRoute
-  '/dashboard/pm': typeof AuthRoleDashboardPmRoute
-  '/dashboard/user': typeof AuthRoleDashboardUserRoute
+  '/dashboard/admin': typeof AuthDashboardAdminRouteWithChildren
+  '/dashboard/pm': typeof AuthDashboardPmRoute
+  '/dashboard/user': typeof AuthDashboardUserRoute
+  '/dashboard/admin/users': typeof AuthDashboardAdminUsersRoute
+  '/dashboard/admin/': typeof AuthDashboardAdminIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof AuthRoleRouteWithChildren
+  '': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/dashboard/admin': typeof AuthRoleDashboardAdminRoute
-  '/dashboard/pm': typeof AuthRoleDashboardPmRoute
-  '/dashboard/user': typeof AuthRoleDashboardUserRoute
+  '/dashboard/pm': typeof AuthDashboardPmRoute
+  '/dashboard/user': typeof AuthDashboardUserRoute
+  '/dashboard/admin/users': typeof AuthDashboardAdminUsersRoute
+  '/dashboard/admin': typeof AuthDashboardAdminIndexRoute
 }
 
 export interface FileRoutesById {
@@ -168,10 +187,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/_auth/_role': typeof AuthRoleRouteWithChildren
-  '/_auth/_role/dashboard/admin': typeof AuthRoleDashboardAdminRoute
-  '/_auth/_role/dashboard/pm': typeof AuthRoleDashboardPmRoute
-  '/_auth/_role/dashboard/user': typeof AuthRoleDashboardUserRoute
+  '/_auth/dashboard/admin': typeof AuthDashboardAdminRouteWithChildren
+  '/_auth/dashboard/pm': typeof AuthDashboardPmRoute
+  '/_auth/dashboard/user': typeof AuthDashboardUserRoute
+  '/_auth/dashboard/admin/users': typeof AuthDashboardAdminUsersRoute
+  '/_auth/dashboard/admin/': typeof AuthDashboardAdminIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -183,23 +203,27 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/dashboard/pm'
     | '/dashboard/user'
+    | '/dashboard/admin/users'
+    | '/dashboard/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/login'
-    | '/dashboard/admin'
     | '/dashboard/pm'
     | '/dashboard/user'
+    | '/dashboard/admin/users'
+    | '/dashboard/admin'
   id:
     | '__root__'
     | '/'
     | '/_auth'
     | '/login'
-    | '/_auth/_role'
-    | '/_auth/_role/dashboard/admin'
-    | '/_auth/_role/dashboard/pm'
-    | '/_auth/_role/dashboard/user'
+    | '/_auth/dashboard/admin'
+    | '/_auth/dashboard/pm'
+    | '/_auth/dashboard/user'
+    | '/_auth/dashboard/admin/users'
+    | '/_auth/dashboard/admin/'
   fileRoutesById: FileRoutesById
 }
 
@@ -236,32 +260,37 @@ export const routeTree = rootRoute
     "/_auth": {
       "filePath": "_auth.tsx",
       "children": [
-        "/_auth/_role"
+        "/_auth/dashboard/admin",
+        "/_auth/dashboard/pm",
+        "/_auth/dashboard/user"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/_auth/_role": {
-      "filePath": "_auth/_role.tsx",
+    "/_auth/dashboard/admin": {
+      "filePath": "_auth/dashboard/admin.tsx",
       "parent": "/_auth",
       "children": [
-        "/_auth/_role/dashboard/admin",
-        "/_auth/_role/dashboard/pm",
-        "/_auth/_role/dashboard/user"
+        "/_auth/dashboard/admin/users",
+        "/_auth/dashboard/admin/"
       ]
     },
-    "/_auth/_role/dashboard/admin": {
-      "filePath": "_auth/_role/dashboard.admin.tsx",
-      "parent": "/_auth/_role"
+    "/_auth/dashboard/pm": {
+      "filePath": "_auth/dashboard/pm.tsx",
+      "parent": "/_auth"
     },
-    "/_auth/_role/dashboard/pm": {
-      "filePath": "_auth/_role/dashboard.pm.tsx",
-      "parent": "/_auth/_role"
+    "/_auth/dashboard/user": {
+      "filePath": "_auth/dashboard/user.tsx",
+      "parent": "/_auth"
     },
-    "/_auth/_role/dashboard/user": {
-      "filePath": "_auth/_role/dashboard.user.tsx",
-      "parent": "/_auth/_role"
+    "/_auth/dashboard/admin/users": {
+      "filePath": "_auth/dashboard/admin/users.tsx",
+      "parent": "/_auth/dashboard/admin"
+    },
+    "/_auth/dashboard/admin/": {
+      "filePath": "_auth/dashboard/admin/index.tsx",
+      "parent": "/_auth/dashboard/admin"
     }
   }
 }

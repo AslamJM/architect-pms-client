@@ -12,11 +12,6 @@ export const Route = createFileRoute('/_auth')({
         },
       })
     }
-
-    const path = userpath(me.role)
-    throw redirect({
-      to: `/dashboard/${path}`,
-    })
   },
 })
 
