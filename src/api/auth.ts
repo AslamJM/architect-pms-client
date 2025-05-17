@@ -3,7 +3,7 @@ import type { LoginInput } from "@/schema/auth";
 import type { Me } from "@/types/user";
 
 const routes = {
-    login: "/auth/login",
+    login: "/auth/sign-in",
     profile: "/auth/profile"
 }
 

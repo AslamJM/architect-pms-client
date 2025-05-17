@@ -54,6 +54,6 @@ class ApiClient {
     }
 }
 
-const API_URL = import.meta.env.API_URL
+const API_URL = import.meta.env.VITE_API_URL
 
 export const apiClient = new ApiClient(API_URL, {})

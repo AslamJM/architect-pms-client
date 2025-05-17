@@ -12,8 +12,12 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
+import { Route as AuthImport } from './routes/_auth'
 import { Route as IndexImport } from './routes/index'
-import { Route as DemoTanstackQueryImport } from './routes/demo.tanstack-query'
+import { Route as AuthRoleImport } from './routes/_auth/_role'
+import { Route as AuthRoleDashboardUserImport } from './routes/_auth/_role/dashboard.user'
+import { Route as AuthRoleDashboardPmImport } from './routes/_auth/_role/dashboard.pm'
+import { Route as AuthRoleDashboardAdminImport } from './routes/_auth/_role/dashboard.admin'
 
 // Create/Update Routes
 
@@ -23,16 +27,38 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const DemoTanstackQueryRoute = DemoTanstackQueryImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
-  getParentRoute: () => rootRoute,
+const AuthRoleRoute = AuthRoleImport.update({
+  id: '/_role',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthRoleDashboardUserRoute = AuthRoleDashboardUserImport.update({
+  id: '/dashboard/user',
+  path: '/dashboard/user',
+  getParentRoute: () => AuthRoleRoute,
+} as any)
+
+const AuthRoleDashboardPmRoute = AuthRoleDashboardPmImport.update({
+  id: '/dashboard/pm',
+  path: '/dashboard/pm',
+  getParentRoute: () => AuthRoleRoute,
+} as any)
+
+const AuthRoleDashboardAdminRoute = AuthRoleDashboardAdminImport.update({
+  id: '/dashboard/admin',
+  path: '/dashboard/admin',
+  getParentRoute: () => AuthRoleRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -46,6 +72,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -53,56 +86,133 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryImport
-      parentRoute: typeof rootRoute
+    '/_auth/_role': {
+      id: '/_auth/_role'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRoleImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/_role/dashboard/admin': {
+      id: '/_auth/_role/dashboard/admin'
+      path: '/dashboard/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof AuthRoleDashboardAdminImport
+      parentRoute: typeof AuthRoleImport
+    }
+    '/_auth/_role/dashboard/pm': {
+      id: '/_auth/_role/dashboard/pm'
+      path: '/dashboard/pm'
+      fullPath: '/dashboard/pm'
+      preLoaderRoute: typeof AuthRoleDashboardPmImport
+      parentRoute: typeof AuthRoleImport
+    }
+    '/_auth/_role/dashboard/user': {
+      id: '/_auth/_role/dashboard/user'
+      path: '/dashboard/user'
+      fullPath: '/dashboard/user'
+      preLoaderRoute: typeof AuthRoleDashboardUserImport
+      parentRoute: typeof AuthRoleImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthRoleRouteChildren {
+  AuthRoleDashboardAdminRoute: typeof AuthRoleDashboardAdminRoute
+  AuthRoleDashboardPmRoute: typeof AuthRoleDashboardPmRoute
+  AuthRoleDashboardUserRoute: typeof AuthRoleDashboardUserRoute
+}
+
+const AuthRoleRouteChildren: AuthRoleRouteChildren = {
+  AuthRoleDashboardAdminRoute: AuthRoleDashboardAdminRoute,
+  AuthRoleDashboardPmRoute: AuthRoleDashboardPmRoute,
+  AuthRoleDashboardUserRoute: AuthRoleDashboardUserRoute,
+}
+
+const AuthRoleRouteWithChildren = AuthRoleRoute._addFileChildren(
+  AuthRoleRouteChildren,
+)
+
+interface AuthRouteChildren {
+  AuthRoleRoute: typeof AuthRoleRouteWithChildren
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthRoleRoute: AuthRoleRouteWithChildren,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '': typeof AuthRoleRouteWithChildren
   '/login': typeof LoginRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/dashboard/admin': typeof AuthRoleDashboardAdminRoute
+  '/dashboard/pm': typeof AuthRoleDashboardPmRoute
+  '/dashboard/user': typeof AuthRoleDashboardUserRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '': typeof AuthRoleRouteWithChildren
   '/login': typeof LoginRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/dashboard/admin': typeof AuthRoleDashboardAdminRoute
+  '/dashboard/pm': typeof AuthRoleDashboardPmRoute
+  '/dashboard/user': typeof AuthRoleDashboardUserRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteWithChildren
   '/login': typeof LoginRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/_auth/_role': typeof AuthRoleRouteWithChildren
+  '/_auth/_role/dashboard/admin': typeof AuthRoleDashboardAdminRoute
+  '/_auth/_role/dashboard/pm': typeof AuthRoleDashboardPmRoute
+  '/_auth/_role/dashboard/user': typeof AuthRoleDashboardUserRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/demo/tanstack-query'
+  fullPaths:
+    | '/'
+    | ''
+    | '/login'
+    | '/dashboard/admin'
+    | '/dashboard/pm'
+    | '/dashboard/user'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/demo/tanstack-query'
-  id: '__root__' | '/' | '/login' | '/demo/tanstack-query'
+  to:
+    | '/'
+    | ''
+    | '/login'
+    | '/dashboard/admin'
+    | '/dashboard/pm'
+    | '/dashboard/user'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/login'
+    | '/_auth/_role'
+    | '/_auth/_role/dashboard/admin'
+    | '/_auth/_role/dashboard/pm'
+    | '/_auth/_role/dashboard/user'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRouteWithChildren
   LoginRoute: typeof LoginRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRouteWithChildren,
   LoginRoute: LoginRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
 }
 
 export const routeTree = rootRoute
@@ -116,18 +226,42 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/login",
-        "/demo/tanstack-query"
+        "/_auth",
+        "/login"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
+    "/_auth": {
+      "filePath": "_auth.tsx",
+      "children": [
+        "/_auth/_role"
+      ]
+    },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/demo/tanstack-query": {
-      "filePath": "demo.tanstack-query.tsx"
+    "/_auth/_role": {
+      "filePath": "_auth/_role.tsx",
+      "parent": "/_auth",
+      "children": [
+        "/_auth/_role/dashboard/admin",
+        "/_auth/_role/dashboard/pm",
+        "/_auth/_role/dashboard/user"
+      ]
+    },
+    "/_auth/_role/dashboard/admin": {
+      "filePath": "_auth/_role/dashboard.admin.tsx",
+      "parent": "/_auth/_role"
+    },
+    "/_auth/_role/dashboard/pm": {
+      "filePath": "_auth/_role/dashboard.pm.tsx",
+      "parent": "/_auth/_role"
+    },
+    "/_auth/_role/dashboard/user": {
+      "filePath": "_auth/_role/dashboard.user.tsx",
+      "parent": "/_auth/_role"
     }
   }
 }

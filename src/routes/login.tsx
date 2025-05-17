@@ -1,6 +1,8 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, redirect, useSearch } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
 import type { LoginInput } from '@/schema/auth'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -8,24 +10,42 @@ import { inputDV, loginSchema } from '@/schema/auth'
 import { Form } from '@/components/ui/form'
 import FormText from '@/components/form/form-text'
 import { login } from '@/api/auth'
+import { useAuthContext } from '@/integrations/context/auth-context'
+import { userpath } from '@/lib/utils'
 
 export const Route = createFileRoute('/login')({
   component: RouteComponent,
+  // beforeLoad: ({ context: { is_authenticated, me } }) => {
+  //   if (is_authenticated && me) {
+  //     throw redirect({
+  //       to: `/dashboard/${userpath(me.role)}`,
+  //     })
+  //   }
+  // },
 })
 
 function RouteComponent() {
+  const navigate = Route.useNavigate()
+
+  const { setAuth, setMe } = useAuthContext()
+
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: inputDV,
   })
 
-  const handleLogin = async (values: LoginInput) => {
-    try {
-      const me = await login(values)
-      console.log(me)
-    } catch (error) {
-      console.log(error)
-    }
+  const { mutate, isPending } = useMutation({
+    mutationFn: login,
+    onSuccess: (me) => {
+      setMe(me)
+      setAuth(true)
+      const path = userpath(me.role)
+      navigate({ to: `/dashboard/${path}` })
+    },
+  })
+
+  const handleLogin = (values: LoginInput) => {
+    mutate(values)
   }
 
   return (
@@ -50,7 +70,10 @@ function RouteComponent() {
                 label="Password"
                 name="password"
               />
-              <Button type="submit">Login</Button>
+              <Button type="submit" disabled={isPending}>
+                {isPending && <Loader2 className="w-4 h-4 animate-spin" />}{' '}
+                Login
+              </Button>
             </form>
           </Form>
         </CardContent>

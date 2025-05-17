@@ -1,6 +1,8 @@
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
 import { routeTree } from './routeTree.gen'
 import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider.tsx'
+import { useAuthContext } from './integrations/context/auth-context.tsx'
 
 // Create a new router instance
 const router = createRouter({
@@ -24,5 +26,15 @@ declare module '@tanstack/react-router' {
 }
 
 export default function App() {
-  return <RouterProvider router={router} />
+  const { me, is_authenticated, is_loading } = useAuthContext()
+
+  if (is_loading) {
+    return (
+      <div className="flex item-center justify-center h-screen">
+        <Loader2 className="animate-spin" />
+      </div>
+    )
+  }
+
+  return <RouterProvider router={router} context={{ me, is_authenticated }} />
 }
