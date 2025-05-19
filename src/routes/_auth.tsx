@@ -1,5 +1,6 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { userpath } from '@/lib/utils'
+import { useAuthContext } from '@/integrations/context/auth-context'
+import { Button } from '@/components/ui/button'
 
 export const Route = createFileRoute('/_auth')({
   component: RouteComponent,
@@ -16,10 +17,15 @@ export const Route = createFileRoute('/_auth')({
 })
 
 function RouteComponent() {
+  const { me } = useAuthContext()
   return (
     <div>
-      <div className="p-4 bg-slate-100">
+      <div className="p-4 bg-slate-100 flex items-center justify-between gap-4">
         <h2>Dashboard</h2>
+        <div className="flex gap-4">
+          <p>{me?.name}</p>
+          <Button>Log Out</Button>
+        </div>
       </div>
       <Outlet />
     </div>

@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import DetailsTab from '@/components/project-tabs/details-tab'
 import PriorityTab from '@/components/project-tabs/priority-tab'
 import GenericTaskTab from '@/components/project-tabs/gen-task-tab'
+import WorkSpace from '@/components/project/work-space'
 
 export const Route = createFileRoute('/_auth/dashboard/admin/projects/$id')({
   component: RouteComponent,
@@ -58,7 +59,9 @@ function RouteComponent() {
                 </TabsContent>
               </Tabs>
             </TabsContent>
-            <TabsContent value="work"></TabsContent>
+            <TabsContent value="work">
+              <WorkSpace />
+            </TabsContent>
           </Tabs>
         </div>
       )}
