@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import AddUserForm from '@/components/admin/users/add-user-form'
+import UsersList from '@/components/admin/users/user-list'
 
 export const Route = createFileRoute('/_auth/dashboard/admin/users')({
   component: RouteComponent,
@@ -7,8 +8,9 @@ export const Route = createFileRoute('/_auth/dashboard/admin/users')({
 
 function RouteComponent() {
   return (
-    <div className="flex p-8">
+    <div className="flex p-8 gap-8">
       <AddUserForm />
+      <UsersList />
     </div>
   )
 }

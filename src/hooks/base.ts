@@ -11,11 +11,11 @@ export const createBaseHook = <T>(queryKey: QueryKey, queryFn: () => Promise<Arr
         })
 
         const create = (created: T) => {
-            queryClient.setQueryData([queryKey], (oldData: Array<T>) => [created, ...oldData])
+            queryClient.setQueryData(queryKey, (oldData: Array<T>) => [created, ...oldData])
         }
 
         const invalidate = async () => await queryClient.invalidateQueries({
-            queryKey: [queryKey]
+            queryKey: queryKey
         })
 
         return {

@@ -8,6 +8,7 @@ import { createUserSchema, userDV } from '@/schema/user'
 import { Button } from '@/components/ui/button'
 import FormSelect from '@/components/form/form-select'
 import { createUser } from '@/api/user'
+import { useUsers } from '@/hooks/use-users'
 
 function AddUserForm() {
   const form = useForm({
@@ -15,11 +16,13 @@ function AddUserForm() {
     defaultValues: userDV,
   })
 
+  const { create } = useUsers()
+
   const { mutate, isPending } = useMutation({
     mutationFn: createUser,
     onSuccess: (data) => {
       form.reset()
-      console.log('User created successfully', data)
+      create(data)
     },
   })
 

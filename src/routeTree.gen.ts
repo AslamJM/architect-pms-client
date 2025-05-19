@@ -19,6 +19,9 @@ import { Route as AuthDashboardPmImport } from './routes/_auth/dashboard/pm'
 import { Route as AuthDashboardAdminImport } from './routes/_auth/dashboard/admin'
 import { Route as AuthDashboardAdminIndexImport } from './routes/_auth/dashboard/admin/index'
 import { Route as AuthDashboardAdminUsersImport } from './routes/_auth/dashboard/admin/users'
+import { Route as AuthDashboardAdminProjectsIndexImport } from './routes/_auth/dashboard/admin/projects.index'
+import { Route as AuthDashboardAdminProjectsCreateImport } from './routes/_auth/dashboard/admin/projects.create'
+import { Route as AuthDashboardAdminProjectsIdImport } from './routes/_auth/dashboard/admin/projects.$id'
 
 // Create/Update Routes
 
@@ -68,6 +71,27 @@ const AuthDashboardAdminUsersRoute = AuthDashboardAdminUsersImport.update({
   path: '/users',
   getParentRoute: () => AuthDashboardAdminRoute,
 } as any)
+
+const AuthDashboardAdminProjectsIndexRoute =
+  AuthDashboardAdminProjectsIndexImport.update({
+    id: '/projects/',
+    path: '/projects/',
+    getParentRoute: () => AuthDashboardAdminRoute,
+  } as any)
+
+const AuthDashboardAdminProjectsCreateRoute =
+  AuthDashboardAdminProjectsCreateImport.update({
+    id: '/projects/create',
+    path: '/projects/create',
+    getParentRoute: () => AuthDashboardAdminRoute,
+  } as any)
+
+const AuthDashboardAdminProjectsIdRoute =
+  AuthDashboardAdminProjectsIdImport.update({
+    id: '/projects/$id',
+    path: '/projects/$id',
+    getParentRoute: () => AuthDashboardAdminRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -129,6 +153,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardAdminIndexImport
       parentRoute: typeof AuthDashboardAdminImport
     }
+    '/_auth/dashboard/admin/projects/$id': {
+      id: '/_auth/dashboard/admin/projects/$id'
+      path: '/projects/$id'
+      fullPath: '/dashboard/admin/projects/$id'
+      preLoaderRoute: typeof AuthDashboardAdminProjectsIdImport
+      parentRoute: typeof AuthDashboardAdminImport
+    }
+    '/_auth/dashboard/admin/projects/create': {
+      id: '/_auth/dashboard/admin/projects/create'
+      path: '/projects/create'
+      fullPath: '/dashboard/admin/projects/create'
+      preLoaderRoute: typeof AuthDashboardAdminProjectsCreateImport
+      parentRoute: typeof AuthDashboardAdminImport
+    }
+    '/_auth/dashboard/admin/projects/': {
+      id: '/_auth/dashboard/admin/projects/'
+      path: '/projects'
+      fullPath: '/dashboard/admin/projects'
+      preLoaderRoute: typeof AuthDashboardAdminProjectsIndexImport
+      parentRoute: typeof AuthDashboardAdminImport
+    }
   }
 }
 
@@ -137,11 +182,17 @@ declare module '@tanstack/react-router' {
 interface AuthDashboardAdminRouteChildren {
   AuthDashboardAdminUsersRoute: typeof AuthDashboardAdminUsersRoute
   AuthDashboardAdminIndexRoute: typeof AuthDashboardAdminIndexRoute
+  AuthDashboardAdminProjectsIdRoute: typeof AuthDashboardAdminProjectsIdRoute
+  AuthDashboardAdminProjectsCreateRoute: typeof AuthDashboardAdminProjectsCreateRoute
+  AuthDashboardAdminProjectsIndexRoute: typeof AuthDashboardAdminProjectsIndexRoute
 }
 
 const AuthDashboardAdminRouteChildren: AuthDashboardAdminRouteChildren = {
   AuthDashboardAdminUsersRoute: AuthDashboardAdminUsersRoute,
   AuthDashboardAdminIndexRoute: AuthDashboardAdminIndexRoute,
+  AuthDashboardAdminProjectsIdRoute: AuthDashboardAdminProjectsIdRoute,
+  AuthDashboardAdminProjectsCreateRoute: AuthDashboardAdminProjectsCreateRoute,
+  AuthDashboardAdminProjectsIndexRoute: AuthDashboardAdminProjectsIndexRoute,
 }
 
 const AuthDashboardAdminRouteWithChildren =
@@ -170,6 +221,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/user': typeof AuthDashboardUserRoute
   '/dashboard/admin/users': typeof AuthDashboardAdminUsersRoute
   '/dashboard/admin/': typeof AuthDashboardAdminIndexRoute
+  '/dashboard/admin/projects/$id': typeof AuthDashboardAdminProjectsIdRoute
+  '/dashboard/admin/projects/create': typeof AuthDashboardAdminProjectsCreateRoute
+  '/dashboard/admin/projects': typeof AuthDashboardAdminProjectsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -180,6 +234,9 @@ export interface FileRoutesByTo {
   '/dashboard/user': typeof AuthDashboardUserRoute
   '/dashboard/admin/users': typeof AuthDashboardAdminUsersRoute
   '/dashboard/admin': typeof AuthDashboardAdminIndexRoute
+  '/dashboard/admin/projects/$id': typeof AuthDashboardAdminProjectsIdRoute
+  '/dashboard/admin/projects/create': typeof AuthDashboardAdminProjectsCreateRoute
+  '/dashboard/admin/projects': typeof AuthDashboardAdminProjectsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -192,6 +249,9 @@ export interface FileRoutesById {
   '/_auth/dashboard/user': typeof AuthDashboardUserRoute
   '/_auth/dashboard/admin/users': typeof AuthDashboardAdminUsersRoute
   '/_auth/dashboard/admin/': typeof AuthDashboardAdminIndexRoute
+  '/_auth/dashboard/admin/projects/$id': typeof AuthDashboardAdminProjectsIdRoute
+  '/_auth/dashboard/admin/projects/create': typeof AuthDashboardAdminProjectsCreateRoute
+  '/_auth/dashboard/admin/projects/': typeof AuthDashboardAdminProjectsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -205,6 +265,9 @@ export interface FileRouteTypes {
     | '/dashboard/user'
     | '/dashboard/admin/users'
     | '/dashboard/admin/'
+    | '/dashboard/admin/projects/$id'
+    | '/dashboard/admin/projects/create'
+    | '/dashboard/admin/projects'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -214,6 +277,9 @@ export interface FileRouteTypes {
     | '/dashboard/user'
     | '/dashboard/admin/users'
     | '/dashboard/admin'
+    | '/dashboard/admin/projects/$id'
+    | '/dashboard/admin/projects/create'
+    | '/dashboard/admin/projects'
   id:
     | '__root__'
     | '/'
@@ -224,6 +290,9 @@ export interface FileRouteTypes {
     | '/_auth/dashboard/user'
     | '/_auth/dashboard/admin/users'
     | '/_auth/dashboard/admin/'
+    | '/_auth/dashboard/admin/projects/$id'
+    | '/_auth/dashboard/admin/projects/create'
+    | '/_auth/dashboard/admin/projects/'
   fileRoutesById: FileRoutesById
 }
 
@@ -273,7 +342,10 @@ export const routeTree = rootRoute
       "parent": "/_auth",
       "children": [
         "/_auth/dashboard/admin/users",
-        "/_auth/dashboard/admin/"
+        "/_auth/dashboard/admin/",
+        "/_auth/dashboard/admin/projects/$id",
+        "/_auth/dashboard/admin/projects/create",
+        "/_auth/dashboard/admin/projects/"
       ]
     },
     "/_auth/dashboard/pm": {
@@ -290,6 +362,18 @@ export const routeTree = rootRoute
     },
     "/_auth/dashboard/admin/": {
       "filePath": "_auth/dashboard/admin/index.tsx",
+      "parent": "/_auth/dashboard/admin"
+    },
+    "/_auth/dashboard/admin/projects/$id": {
+      "filePath": "_auth/dashboard/admin/projects.$id.tsx",
+      "parent": "/_auth/dashboard/admin"
+    },
+    "/_auth/dashboard/admin/projects/create": {
+      "filePath": "_auth/dashboard/admin/projects.create.tsx",
+      "parent": "/_auth/dashboard/admin"
+    },
+    "/_auth/dashboard/admin/projects/": {
+      "filePath": "_auth/dashboard/admin/projects.index.tsx",
       "parent": "/_auth/dashboard/admin"
     }
   }
