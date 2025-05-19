@@ -15,3 +15,19 @@ export const projectDetailsDV: CreateProjectDetailsInput = {
   design_notes: '',
   assigned_to_id: '',
 }
+
+export const createTaskSchema = z.object({
+  content: z.string(),
+  type: z.enum([
+    'PRIORITY',
+    'CLIENT_FEEDBACK',
+    'ELEMENT',
+    'ITEM_TO_KEEP',
+    'ITEM_TO_REMOVE',
+    'INSPIRATION',
+  ]),
+  image_urls: z.array(z.string()),
+  completed: z.boolean(),
+})
+
+export type CreateTaskInput = z.infer<typeof createTaskSchema>

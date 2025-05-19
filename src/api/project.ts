@@ -1,6 +1,6 @@
 import { apiClient } from "./client";
-import type { Project, TableProject } from "@/types/project";
-import type { CreateProjectDetailsInput } from "@/schema/project";
+import type { Project, TableProject, Task } from "@/types/project";
+import type { CreateProjectDetailsInput, CreateTaskInput } from "@/schema/project";
 
 const routes = {
     all: "/projects",
@@ -17,4 +17,11 @@ export async function getAllProjectsForAdmin() {
 
 export async function getSingleProject(id: string) {
     return await apiClient.get<Project>(`${routes.all}/${id}`);
+}
+
+export async function addTask(input:{
+    projectId:string,
+    data:CreateTaskInput
+}) {
+    return await apiClient.post<CreateTaskInput,Task>(`${routes.all}/${input.projectId}/task`,input.data)
 }

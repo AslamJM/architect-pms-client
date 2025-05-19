@@ -1,11 +1,20 @@
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { getSingleProject } from "@/api/project"
 
 export const useSingleProject = (id: string) => {
-    const { data, isLoading } = useQuery({
-        queryKey: ['project', id],
+
+    const queryKey = ['project', id]
+
+    const { data, isLoading, } = useQuery({
+        queryKey,
         queryFn: () => getSingleProject(id)
     })
 
-    return { data, isLoading }
+    const qc = useQueryClient()
+
+    const invalidate = ()=>{
+        qc.invalidateQueries({queryKey})
+    }
+
+    return { data, isLoading,invalidate }
 }
