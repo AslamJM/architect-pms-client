@@ -1,10 +1,28 @@
-import { Button } from '../ui/button'
+import { useProjectId } from '@/hooks/use-project-id'
+import { useSingleProject } from '@/hooks/use-single-project'
 
-export default function UploadedFiles() {
+type Props = {
+  phase_no: number
+}
+
+export default function UploadedFiles({ phase_no }: Props) {
+  const id = useProjectId()
+  const { data } = useSingleProject(id)
+
+  const phase = data?.phases.find((p) => p.phase_number === phase_no)
+
   return (
     <div className="space-y-4">
-      <div className="bg-slate-400 h-[160px]">File Upload Field Here</div>
-      <Button>Add Phase </Button>
+      <h4>Uploaded Files</h4>
+      {phase && (
+        <div>
+          {phase.uploads
+            .filter((u) => u.type === 'UPLOADED_FILES')
+            .map((up) => (
+              <p key={up.url}>{up.url}</p>
+            ))}
+        </div>
+      )}
     </div>
   )
 }

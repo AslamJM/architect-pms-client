@@ -1,6 +1,8 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
 import { useAuthContext } from '@/integrations/context/auth-context'
 import { Button } from '@/components/ui/button'
+import { logout } from '@/api/auth'
 
 export const Route = createFileRoute('/_auth')({
   component: RouteComponent,
@@ -17,14 +19,27 @@ export const Route = createFileRoute('/_auth')({
 })
 
 function RouteComponent() {
-  const { me } = useAuthContext()
+  const { me, setMe, setAuth } = useAuthContext()
+  const navigate = Route.useNavigate()
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      setAuth(false)
+      setMe(null)
+      navigate({ to: '/login' })
+    },
+  })
+
   return (
     <div>
       <div className="p-4 bg-slate-100 flex items-center justify-between gap-4">
         <h2>Dashboard</h2>
         <div className="flex gap-4">
           <p>{me?.name}</p>
-          <Button>Log Out</Button>
+          <Button onClick={() => mutate()} disabled={isPending}>
+            Log Out
+          </Button>
         </div>
       </div>
       <Outlet />

@@ -31,3 +31,8 @@ export const createTaskSchema = z.object({
 })
 
 export type CreateTaskInput = z.infer<typeof createTaskSchema>
+
+export type CreatePhaseInput = {
+  phase_number: number
+  upload_urls: Array<string>
+}

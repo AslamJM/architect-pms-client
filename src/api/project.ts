@@ -1,10 +1,11 @@
 import { apiClient } from "./client";
-import type { Project, TableProject, Task } from "@/types/project";
-import type { CreateProjectDetailsInput, CreateTaskInput } from "@/schema/project";
+import type { Phase, Project, TableProject, Task } from "@/types/project";
+import type { CreatePhaseInput, CreateProjectDetailsInput, CreateTaskInput } from "@/schema/project";
 
 const routes = {
     all: "/projects",
-    admin: "/projects/admin"
+    admin: "/projects/admin",
+    user:"/projects/user"
 }
 
 export async function createProject(input: CreateProjectDetailsInput) {
@@ -13,6 +14,10 @@ export async function createProject(input: CreateProjectDetailsInput) {
 
 export async function getAllProjectsForAdmin() {
     return await apiClient.get<Array<TableProject>>(routes.admin);
+}
+
+export async function getAllUserProjects() {
+    return await apiClient.get<Array<TableProject>>(routes.user)
 }
 
 export async function getSingleProject(id: string) {
@@ -24,4 +29,10 @@ export async function addTask(input:{
     data:CreateTaskInput
 }) {
     return await apiClient.post<CreateTaskInput,Task>(`${routes.all}/${input.projectId}/task`,input.data)
+}
+
+export async function addPhase(
+    input:{projectId:string,data:CreatePhaseInput}
+) {
+    return await apiClient.post<CreatePhaseInput,Phase>(`${routes.all}/${input.projectId}/phase`,input.data)
 }

@@ -6,8 +6,8 @@ export const Route = createFileRoute('/_auth/dashboard/admin')({
 
 function RouteComponent() {
   return (
-    <div className="flex">
-      <div className="w-[300px] flex flex-col gap-4 p-8 border-r-[1px] border-slate-600">
+    <div className="grid grid-cols-5">
+      <div className="col-span-1 flex flex-col gap-4 p-8 border-r-[1px] border-slate-600">
         <Link to="/dashboard/admin/projects" className="text-blue-500">
           Projects
         </Link>
@@ -15,7 +15,7 @@ function RouteComponent() {
           Users
         </Link>
       </div>
-      <div className="flex-grow">
+      <div className="col-span-4">
         <Outlet />
       </div>
     </div>

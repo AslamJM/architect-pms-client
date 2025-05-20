@@ -4,7 +4,8 @@ import type { Me } from "@/types/user";
 
 const routes = {
     login: "/auth/sign-in",
-    profile: "/auth/profile"
+    profile: "/auth/profile",
+    signout:"/auth/logout"
 }
 
 export async function login(input: LoginInput) {
@@ -14,4 +15,8 @@ export async function login(input: LoginInput) {
 
 export async function getMe() {
     return await apiClient.get<Me>(routes.profile)
+}
+
+export async function logout() {
+    return await apiClient.post<{},{success:true}>(routes.signout,{})
 }

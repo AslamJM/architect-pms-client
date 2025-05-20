@@ -3,6 +3,8 @@ import type { User } from "./user"
 export type TaskType = "PRIORITY" | "CLIENT_FEEDBACK" | "ELEMENT"
     | "ITEM_TO_KEEP" | "ITEM_TO_REMOVE" | "INSPIRATION"
 
+export type UploadType = "UPLOADED_FILES" | "WORKING_FILES" |"RENDERED_IMAGES" 
+
 export type TaskImage = {
     id: number
     url: string
@@ -18,11 +20,27 @@ export type Task = {
     project_id: string
 }
 
+export type Phase = {
+    phase_number:number
+    verified:boolean
+    uploads:Array<{
+        type:UploadType
+        url:string
+    }>
+}
+
+export type UploadInput = {
+    url:string
+    phase_number:number 
+    type:UploadType
+}
+
 export type Project = {
     id: string
     name: string
     description: string
     tasks: Array<Task>
+    phases:Array<Phase>
     design_notes: string
     assigned_to_id: string
     assigned_by_id: string
