@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { Loader2 } from 'lucide-react'
 import type { CreateProjectDetailsInput } from '@/schema/project'
 import { createProject } from '@/api/project'
 import FormSelect from '@/components/form/form-select'
@@ -11,6 +12,7 @@ import { Form } from '@/components/ui/form'
 import { useUsers } from '@/hooks/use-users'
 import { createProjectDetailsSchema, projectDetailsDV } from '@/schema/project'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useAdminProjects } from '@/hooks/admin/use-admin-projects'
 
 export default function AddProjectDetailsForm() {
   const form = useForm<CreateProjectDetailsInput>({
@@ -18,11 +20,12 @@ export default function AddProjectDetailsForm() {
     defaultValues: projectDetailsDV,
   })
   const { isLoading, data } = useUsers()
+  const { invalidate } = useAdminProjects()
 
   const { mutate, isPending } = useMutation({
     mutationFn: createProject,
-    onSuccess: (data) => {
-      console.log('Project created successfully', data)
+    onSuccess: () => {
+      invalidate()
       form.reset()
     },
   })
@@ -30,7 +33,7 @@ export default function AddProjectDetailsForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add New Project</CardTitle>
+        <CardTitle>Create New Project</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -56,10 +59,15 @@ export default function AddProjectDetailsForm() {
               isLoading={isLoading}
               placeholder="Select User"
               data={
-                data ? data.map((d) => ({ label: d.name, value: d.id })) : []
+                data
+                  ? data
+                      .filter((d) => d.role === 'USER')
+                      .map((d) => ({ label: d.name, value: d.id }))
+                  : []
               }
             />
             <Button type="submit" disabled={isPending}>
+              {isPending && <Loader2 className="w-4 h-4 mr-2" />}
               Create Project
             </Button>
           </form>
