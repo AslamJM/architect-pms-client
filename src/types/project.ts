@@ -54,7 +54,7 @@ export type Project = {
 export type TableProject = {
     id: string
     name: string
-    assined_to: string
+    assigned_to: {name:string}
     is_completed: boolean
     is_paid: boolean
     created_at: Date

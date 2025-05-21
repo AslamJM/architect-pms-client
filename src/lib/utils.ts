@@ -1,5 +1,6 @@
 import { clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import {format} from 'date-fns'
 import type { ClassValue } from 'clsx';
 import type { UserRole } from '@/types/user';
 
@@ -16,4 +17,8 @@ export function userpath(role: UserRole) {
     case "USER":
       return "user"
   }
+}
+
+export function formatDate(date:Date) {
+  return format(date,"dd/MM/yyyy")
 }
