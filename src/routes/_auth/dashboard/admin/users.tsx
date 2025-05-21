@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_auth/dashboard/admin/users')({
 
 function RouteComponent() {
   return (
-    <div className="flex p-8 gap-8">
+    <div className="flex flex-col md:flex-row p-8 gap-8">
       <AddUserForm />
       <UsersList />
     </div>
