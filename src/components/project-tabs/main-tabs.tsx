@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function MainTabs() {
   return (
-    <div className="p-8">
+    <div className="py-4 md:py-8 px-4 md:px-16">
       <Tabs defaultValue="info" className="w-full">
         <TabsList className="w-full">
           <TabsTrigger value="info">Info</TabsTrigger>

@@ -52,6 +52,14 @@ class ApiClient {
         }
         return this.request<TRes>(endpoint, options)
     }
+
+    async patch<TRes>(endpoint: string, body: object): Promise<TRes> {
+        const options: RequestInit = {
+            method: "PATCH",
+            body: JSON.stringify(body),
+        }
+        return this.request<TRes>(endpoint, options)
+    }
 }
 
 const API_URL = import.meta.env.VITE_API_URL

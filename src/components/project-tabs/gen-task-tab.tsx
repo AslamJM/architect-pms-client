@@ -10,7 +10,7 @@ type Props = {
 export default function GenericTaskTab({ type }: Props) {
   const { canAddTasks } = useAbilty()
   return (
-    <div>
+    <div className="space-y-4">
       {canAddTasks && <AddTask type={type} />}
       <TaskList type={type} />
     </div>

@@ -36,3 +36,10 @@ export async function addPhase(
 ) {
     return await apiClient.post<CreatePhaseInput,Phase>(`${routes.all}/${input.projectId}/phase`,input.data)
 }
+
+export async function updateProject({id,data}:{
+    id:string,
+    data:Partial<Project>
+}) {
+    return await apiClient.patch<{success:true}>(`${routes.all}/${id}`,data)
+}

@@ -1,9 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { useState } from 'react'
+import { Loader2 } from 'lucide-react'
 import { Form } from '../ui/form'
 import FormTextArea from '../form/form-text-area'
 import { Button } from '../ui/button'
+import { Card, CardContent } from '../ui/card'
+import TaskImageUpload from './task-image-upload'
 import type { TaskType } from '@/types/project'
 import type { CreateTaskInput } from '@/schema/project'
 import { createTaskSchema } from '@/schema/project'
@@ -17,12 +21,13 @@ type Props = {
 
 export default function AddTask({ type }: Props) {
   const prid = useProjectId()
+  const [urls, setUrls] = useState<Array<string>>([])
 
   const form = useForm({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
       content: '',
-      image_urls: ['https://picsum.photos/200', 'https://picsum.photos/200'],
+      image_urls: urls,
       type,
       completed: false,
     },
@@ -34,6 +39,7 @@ export default function AddTask({ type }: Props) {
     mutationFn: addTask,
     onSuccess: () => {
       form.reset()
+      setUrls([])
       invalidate()
     },
   })
@@ -41,21 +47,31 @@ export default function AddTask({ type }: Props) {
   const onSubmit = (values: CreateTaskInput) => {
     mutate({
       projectId: prid,
-      data: values,
+      data: {
+        ...values,
+        image_urls: urls,
+      },
     })
   }
 
   return (
-    <div>
-      <Form {...form}>
-        <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-          <FormTextArea control={form.control} label="Details" name="content" />
-          <div>Image Upload Field Here....</div>
-          <Button type="submit" disabled={isPending}>
-            Add
-          </Button>
-        </form>
-      </Form>
-    </div>
+    <Card>
+      <CardContent className="px-8">
+        <Form {...form}>
+          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+            <FormTextArea
+              control={form.control}
+              label="Details"
+              name="content"
+            />
+            <TaskImageUpload urls={urls} setUrls={setUrls} />
+            <Button type="submit" disabled={isPending}>
+              {isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+              Add
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   )
 }
