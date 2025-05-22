@@ -5,7 +5,8 @@ import type { CreatePhaseInput, CreateProjectDetailsInput, CreateTaskInput } fro
 const routes = {
     all: "/projects",
     admin: "/projects/admin",
-    user:"/projects/user"
+    user:"/projects/user",
+    task:"/project/task"
 }
 
 export async function createProject(input: CreateProjectDetailsInput) {
@@ -42,4 +43,11 @@ export async function updateProject({id,data}:{
     data:Partial<Project>
 }) {
     return await apiClient.patch<{success:true}>(`${routes.all}/${id}`,data)
+}
+
+export async function updateTask({ id, data }: {
+    id: string,
+    data: Partial<Task>
+}) {
+    return await apiClient.patch<{ success: true }>(`${routes.task}/${id}`, data)
 }
