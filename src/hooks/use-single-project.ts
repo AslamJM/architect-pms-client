@@ -35,11 +35,11 @@ export const useSingleProject = (id: string) => {
         qc.setQueryData(queryKey, newData)
     }
 
-    const updateTaskInProject = (task: Task) => {
+    const updateTaskInProject = (task: Partial<Task>) => {
         if (!data) return
         const newData = {
             ...data,
-            tasks: data.tasks.map((t) => (t.id === task.id ? task : t))
+            tasks: data.tasks.map((t) => (t.id === task.id ? {...t,...task} : t))
         }
         qc.setQueryData(queryKey, newData)
     }

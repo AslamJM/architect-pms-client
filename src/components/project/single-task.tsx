@@ -1,7 +1,11 @@
+import { useMutation } from '@tanstack/react-query'
 import { Checkbox } from '../ui/checkbox'
 import { SelectSeparator } from '../ui/select'
 import type { Task } from '@/types/project'
 import { useAbilty } from '@/hooks/use-ability'
+import { updateTask } from '@/api/project'
+import { useProjectId } from '@/hooks/use-project-id'
+import { useSingleProject } from '@/hooks/use-single-project'
 
 type Props = {
   task: Task
@@ -9,10 +13,34 @@ type Props = {
 
 export default function SingleTask({ task }: Props) {
   const { isUser } = useAbilty()
+  const projectId = useProjectId()
+  const { updateTaskInProject } = useSingleProject(projectId)
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: updateTask,
+    onSuccess: () => {
+      updateTaskInProject({ completed: !task.completed })
+    },
+  })
+
+  const checkCompleted = () => {
+    mutate({
+      id: task.id,
+      data: {
+        completed: !task.completed,
+      },
+    })
+  }
+
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-4">
-        <Checkbox defaultChecked={task.completed} disabled={!isUser} />
+        <Checkbox
+          defaultChecked={task.completed}
+          disabled={!isUser || isPending}
+          onCheckedChange={checkCompleted}
+          className="cursor-pointer"
+        />
         <p className="text-sm text-muted-foreground">{task.content}</p>
       </div>
       <div className="flex gap-2">

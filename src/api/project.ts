@@ -6,7 +6,7 @@ const routes = {
     all: "/projects",
     admin: "/projects/admin",
     user:"/projects/user",
-    task:"/project/task"
+    task:"/projects/task"
 }
 
 export async function createProject(input: CreateProjectDetailsInput) {

@@ -12,8 +12,8 @@ function RouteComponent() {
   return (
     <div className="space-y-4 p-8">
       <h5 className="text-lg font-semibold">Projects</h5>
+      {isLoading && <ProjectsSkeleton />}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {isLoading && <ProjectsSkeleton />}
         {data && data.map((pr) => <ProjectCard project={pr} key={pr.id} />)}
       </div>
     </div>

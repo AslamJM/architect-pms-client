@@ -9,6 +9,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import type { TableProject } from '@/types/project'
 import { formatDate } from '@/lib/utils'
+import { useAbilty } from '@/hooks/use-ability'
 
 type Props = {
   project: TableProject
@@ -16,13 +17,16 @@ type Props = {
 
 export default function ProjectCard({ project }: Props) {
   const navigate = useNavigate()
+  const { isAdmin } = useAbilty()
 
   return (
     <Card
       className="cursor-pointer hover:shadow-md transition-all duration-200"
       onClick={() =>
         navigate({
-          to: '/dashboard/admin/projects/$id',
+          to: isAdmin
+            ? '/dashboard/admin/projects/$id'
+            : '/dashboard/user/projects/$id',
           params: { id: project.id },
         })
       }
