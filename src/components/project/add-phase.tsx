@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
+import { FileIcon, Loader2 } from 'lucide-react'
 import { Button } from '../ui/button'
 
+import { Card, CardContent } from '../ui/card'
+import DropzoneField from './dropzone-field'
 import { useProjectId } from '@/hooks/use-project-id'
 import { useSingleProject } from '@/hooks/use-single-project'
 import { addPhase } from '@/api/project'
+import { getFileNameFromUrl } from '@/lib/mock'
 
 type Props = {
   next_phase: number
@@ -16,14 +20,6 @@ export default function AddPhaseToProject({ next_phase }: Props) {
 
   const id = useProjectId()
   const { invalidate } = useSingleProject(id)
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (files) {
-      const file = files[0]
-      setUrls((prev) => [...prev, `https://my-server/${file.name}`])
-    }
-  }
 
   const { mutate, isPending } = useMutation({
     mutationFn: addPhase,
@@ -47,16 +43,27 @@ export default function AddPhaseToProject({ next_phase }: Props) {
   return (
     <div className="space-y-4">
       {showPhaseForm ? (
-        <div className="space-y-2">
-          <div className="bg-muted h-[150px] p-4 space-y-4">
-            <p>Upload Working Files Here ....</p>
-            <input
-              type="file"
-              className="bg-green-300 p-4"
-              onChange={handleFileUpload}
-            />
+        <Card>
+          <CardContent className="space-y-4">
+            <h5>Upload Working Files</h5>
+            <DropzoneField type="WORKING_FILES" urls={urls} setUrls={setUrls} />
+            <div className="flex items-center gap-4">
+              {urls.map((url) => (
+                <div
+                  key={url}
+                  className="flex flex-col items-center rounded justify-center p-2 border-[1px] border-[muted]"
+                >
+                  <FileIcon />
+                  <p className="text-sm text-muted-foreground">
+                    {getFileNameFromUrl(url)}
+                  </p>
+                </div>
+              ))}
+            </div>
+
             <div className="flex gap-4">
               <Button disabled={isPending} onClick={createPhase}>
+                {isPending && <Loader2 className="animate-spin w-4 h-4 mr-2" />}
                 Create Phase
               </Button>
               <Button
@@ -66,8 +73,8 @@ export default function AddPhaseToProject({ next_phase }: Props) {
                 Cancel
               </Button>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       ) : (
         <div>
           <Button onClick={() => setShowPhaseForm(true)}>Add New Phase</Button>

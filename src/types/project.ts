@@ -20,13 +20,17 @@ export type Task = {
     project_id: string
 }
 
+export type Upload = {
+    id:string 
+    url:string 
+    type:UploadType
+    uploaded_at:Date
+}
+
 export type Phase = {
     phase_number:number
     verified:boolean
-    uploads:Array<{
-        type:UploadType
-        url:string
-    }>
+    uploads:Array<Upload>
 }
 
 export type UploadInput = {

@@ -1,3 +1,4 @@
+import SingleWorkFile from './single-work-file'
 import { useProjectId } from '@/hooks/use-project-id'
 import { useSingleProject } from '@/hooks/use-single-project'
 
@@ -12,14 +13,13 @@ export default function UploadedFiles({ phase_no }: Props) {
   const phase = data?.phases.find((p) => p.phase_number === phase_no)
 
   return (
-    <div className="space-y-4">
-      <h4>Uploaded Files</h4>
+    <div>
       {phase && (
-        <div>
+        <div className="space-y-4">
           {phase.uploads
             .filter((u) => u.type === 'UPLOADED_FILES')
             .map((up) => (
-              <p key={up.url}>{up.url}</p>
+              <SingleWorkFile key={up.id} upload={up} />
             ))}
         </div>
       )}

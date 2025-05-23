@@ -1,6 +1,7 @@
 import { Edit2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { useState } from 'react'
 import { Button } from '../ui/button'
 import {
   Dialog,
@@ -24,6 +25,7 @@ type Props = {
 }
 
 export default function EditProjectProperty({ propertyName, value }: Props) {
+  const [open, setOpen] = useState(false)
   const id = useProjectId()
 
   const { updateProject: update } = useSingleProject(id)
@@ -37,11 +39,10 @@ export default function EditProjectProperty({ propertyName, value }: Props) {
   const { mutate, isPending } = useMutation({
     mutationFn: updateProject,
     onSuccess: () => {
-      console.log('ok')
-
       update({
         [propertyName]: value,
       })
+      setOpen(false)
     },
   })
 
@@ -57,9 +58,9 @@ export default function EditProjectProperty({ propertyName, value }: Props) {
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button variant="ghost">
+        <Button variant="ghost" size="icon">
           <Edit2 className="w-4 h-4" />
         </Button>
       </DialogTrigger>

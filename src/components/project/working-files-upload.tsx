@@ -1,4 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
+import { useState } from 'react'
+import SingleWorkFile from './single-work-file'
+import DropzoneField from './dropzone-field'
 import type { UploadType } from '@/types/project'
 import type React from 'react'
 import { useProjectId } from '@/hooks/use-project-id'
@@ -12,6 +15,8 @@ type Props = {
 }
 
 export default function WorkingFileUploads({ phase_no, type }: Props) {
+  const [urls, setUrls] = useState<Array<string>>([])
+
   const id = useProjectId()
   const { data, invalidate } = useSingleProject(id)
   const { isUser } = useAbilty()
@@ -46,11 +51,9 @@ export default function WorkingFileUploads({ phase_no, type }: Props) {
         {phase &&
           phase.uploads
             .filter((u) => u.type === type)
-            .map((up) => <p key={up.url}>{up.url}</p>)}
+            .map((up) => <SingleWorkFile key={up.id} upload={up} />)}
       </div>
-      {isUser && (
-        <input type="file" className="p-4 bg-muted" onChange={hadleUpload} />
-      )}
+      {isUser && <DropzoneField urls={urls} setUrls={setUrls} type={type} />}
     </div>
   )
 }

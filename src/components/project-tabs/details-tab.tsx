@@ -1,12 +1,16 @@
 import { format } from 'date-fns'
 import { Card, CardContent } from '../ui/card'
 import ProjectCompleted from '../project/project-completed'
+import EditProjectProperty from '../dialogs/edit-project-property'
 import { useProjectId } from '@/hooks/use-project-id'
 import { useSingleProject } from '@/hooks/use-single-project'
+import { useAbilty } from '@/hooks/use-ability'
 
 export default function DetailsTab() {
   const id = useProjectId()
   const { data } = useSingleProject(id)
+
+  const { canAddTasks } = useAbilty()
 
   if (data) {
     return (
@@ -14,13 +18,30 @@ export default function DetailsTab() {
         <CardContent>
           <div className="space-y-4">
             <div>
-              <h6 className="font-semibold mb-1">Description</h6>
+              <div className="flex items-center gap-4">
+                <h6 className="font-semibold mb-1">Description</h6>
+                {canAddTasks && (
+                  <EditProjectProperty
+                    value={data.description}
+                    propertyName="description"
+                  />
+                )}
+              </div>
               <p className="text-sm text-muted-foreground">
                 {data.description}
               </p>
             </div>
             <div>
-              <h6 className="font-semibold mb-1">Design Notes</h6>
+              <div className="flex items-center gap-4">
+                <h6 className="font-semibold mb-1">Design Notes</h6>
+                {canAddTasks && (
+                  <EditProjectProperty
+                    value={data.design_notes}
+                    propertyName="design_notes"
+                  />
+                )}
+              </div>
+
               <p className="text-sm text-muted-foreground">
                 {data.design_notes}
               </p>
