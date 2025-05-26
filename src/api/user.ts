@@ -13,3 +13,7 @@ export async function getUsers() {
 export async function createUser(input: CreateUserInput) {
     return await apiClient.post<CreateUserInput, User>(`${routes.base}`, input)
 }
+
+export async function updateUser(id: string, input: Partial<CreateUserInput>) {
+    return await apiClient.patch(`${routes.base}/${id}`, input)
+}

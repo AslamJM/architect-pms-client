@@ -3,6 +3,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { Button } from '../ui/button'
 import Spinner from '../spinner'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { useAuthContext } from '@/integrations/context/auth-context'
 import { logout } from '@/api/auth'
 
@@ -24,14 +25,19 @@ export default function UserButton() {
         <User2Icon className="w-4 h-4" />
         {me?.name}
       </div>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="cursor-pointer"
-        onClick={() => mutate()}
-      >
-        {isPending ? <Spinner /> : <LogOutIcon className="w-6 h-6" />}
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="cursor-pointer"
+            onClick={() => mutate()}
+          >
+            {isPending ? <Spinner /> : <LogOutIcon className="w-6 h-6" />}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Logout from the application</TooltipContent>
+      </Tooltip>
     </div>
   )
 }

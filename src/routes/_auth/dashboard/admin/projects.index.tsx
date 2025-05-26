@@ -5,13 +5,40 @@ import { useAdminProjects } from '@/hooks/admin/use-admin-projects'
 import ProjectCard from '@/components/project/project-card'
 import ProjectsSkeleton from '@/components/skeletons/projects-skeleton'
 import { Input } from '@/components/ui/input'
+import UserFilter from '@/components/filters/user-filter'
+
+export type ProjectSearch = {
+  page?: number
+  name?: string
+  assigned_to?: string
+}
+
+export const validateSearch = (
+  search: Record<string, unknown>,
+): ProjectSearch => {
+  return {
+    page: typeof search.page === 'string' ? parseInt(search.page) : undefined,
+    name: typeof search.name === 'string' ? search.name : undefined,
+    assigned_to:
+      typeof search.assing_to === 'string' ? search.assing_to : undefined,
+  }
+}
 
 export const Route = createFileRoute('/_auth/dashboard/admin/projects/')({
   component: RouteComponent,
+  validateSearch,
 })
 
 function RouteComponent() {
-  const { data, isLoading } = useAdminProjects()
+  const { data, isLoading, error } = useAdminProjects()
+  const navigate = Route.useNavigate()
+
+  const setAssignedTo = (id: string | undefined) => {
+    navigate({
+      search: (prev) => ({ ...prev, assigned_to: id }),
+    })
+  }
+
   return (
     <div className="space-y-6 p-8">
       <div className="flex item-center gap-8">
@@ -28,10 +55,27 @@ function RouteComponent() {
         </div>
       </div>
       <div>
-        <Input placeholder="search project name" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div>
+            <Input
+              placeholder="search project name"
+              onChange={(e) =>
+                navigate({
+                  search: (prev) => ({ ...prev, name: e.target.value }),
+                })
+              }
+            />
+          </div>
+          <UserFilter setAssignedTo={setAssignedTo} />
+        </div>
       </div>
       <div className="space-y-4">
         {isLoading && <ProjectsSkeleton />}
+        {error && (
+          <div className="text-red-500 text-sm">
+            An error occurred while fetching projects: {error.message}
+          </div>
+        )}
         {data && data.length === 0 && (
           <div className="text-sm text-muted-foreground">
             No Projects were found.

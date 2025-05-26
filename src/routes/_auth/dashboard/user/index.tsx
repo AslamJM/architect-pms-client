@@ -1,10 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { validateSearch } from '../admin/projects.index'
 import { useUserProjects } from '@/hooks/user/use-user-projects'
 import ProjectsSkeleton from '@/components/skeletons/projects-skeleton'
 import ProjectCard from '@/components/project/project-card'
 
 export const Route = createFileRoute('/_auth/dashboard/user/')({
   component: RouteComponent,
+  validateSearch: validateSearch,
 })
 
 function RouteComponent() {

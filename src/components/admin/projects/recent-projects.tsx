@@ -1,12 +1,12 @@
 import { Link } from '@tanstack/react-router'
 import { ChevronLeft } from 'lucide-react'
-import { useAdminProjects } from '@/hooks/admin/use-admin-projects'
+import { useRecentProjectsAdmin } from '@/hooks/admin/use-admin-projects'
 import ProjectListItem from '@/components/project/project-list-item'
 import ProjectListSkeleton from '@/components/skeletons/project-list-skeleton'
 import { Button } from '@/components/ui/button'
 
 export default function RecentProjects() {
-  const { isLoading, data } = useAdminProjects()
+  const { isLoading, data } = useRecentProjectsAdmin()
   return (
     <div className="space-y-4">
       <Link to="/dashboard/admin/projects" className="block mb-4">
@@ -23,7 +23,7 @@ export default function RecentProjects() {
           </div>
         )}
         {data &&
-          data.map((pr) => (
+          data.slice(0, 5).map((pr) => (
             <Link
               key={pr.id}
               to={'/dashboard/admin/projects/$id'}

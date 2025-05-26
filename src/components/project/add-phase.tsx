@@ -8,7 +8,7 @@ import DropzoneField from './dropzone-field'
 import { useProjectId } from '@/hooks/use-project-id'
 import { useSingleProject } from '@/hooks/use-single-project'
 import { addPhase } from '@/api/project'
-import { getFileNameFromUrl } from '@/lib/mock'
+import { createMockUrl, getFileNameFromUrl } from '@/lib/mock'
 
 type Props = {
   next_phase: number
@@ -20,6 +20,16 @@ export default function AddPhaseToProject({ next_phase }: Props) {
 
   const id = useProjectId()
   const { invalidate } = useSingleProject(id)
+
+  const onDrop = async (acceptedFiles: Array<File>) => {
+    // mock image upload
+    // !TODO connect to backend upload to S3
+    const uploadedUrls = acceptedFiles.map((file) => {
+      return createMockUrl(file.name, 'UPLOADED_FILES', id)
+    })
+
+    setUrls((prev) => [...prev, ...uploadedUrls])
+  }
 
   const { mutate, isPending } = useMutation({
     mutationFn: addPhase,
@@ -46,7 +56,7 @@ export default function AddPhaseToProject({ next_phase }: Props) {
         <Card>
           <CardContent className="space-y-4">
             <h5>Upload Working Files</h5>
-            <DropzoneField type="WORKING_FILES" urls={urls} setUrls={setUrls} />
+            <DropzoneField onDrop={onDrop} />
             <div className="flex items-center gap-4">
               {urls.map((url) => (
                 <div

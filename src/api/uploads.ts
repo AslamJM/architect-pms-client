@@ -2,7 +2,8 @@ import { apiClient } from "./client"
 import type { UploadInput } from "@/types/project"
 
 const routes = {
-    project:"/uploads/project"
+    project:"/uploads/project",
+    rm:"/uploads"
 }
 
 export async function uploadForPhase(input:{
@@ -10,4 +11,8 @@ export async function uploadForPhase(input:{
     data:UploadInput
 }) {
     return await apiClient.post(`${routes.project}/${input.projectId}`,input.data)
+}
+
+export async function deleteUpload(id:string) {
+    return await apiClient.delete(`${routes.rm}/${id}`)
 }

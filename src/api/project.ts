@@ -1,10 +1,12 @@
 import { apiClient } from "./client";
 import type { Phase, Project, TableProject, Task } from "@/types/project";
 import type { CreatePhaseInput, CreateProjectDetailsInput, CreateTaskInput } from "@/schema/project";
+import type { ProjectSearch } from "@/routes/_auth/dashboard/admin/projects.index";
 
 const routes = {
     all: "/projects",
     admin: "/projects/admin",
+    pm:"/projects/pm",
     user:"/projects/user",
     task:"/projects/task"
 }
@@ -13,12 +15,27 @@ export async function createProject(input: CreateProjectDetailsInput) {
     return await apiClient.post<CreateProjectDetailsInput, Project>(routes.all, input)
 }
 
-export async function getAllProjectsForAdmin() {
-    return await apiClient.get<Array<TableProject>>(routes.admin);
+function formatParam(query?: ProjectSearch) {
+    const params = new URLSearchParams()
+    if (query) {
+        Object.keys(query).forEach(key => {
+            if (query[key as keyof ProjectSearch] !== undefined) {
+                params.append(key, query[key as keyof ProjectSearch]!.toString())
+            }
+        })
+    }
+
+    return params.toString()
 }
 
-export async function getAllUserProjects() {
-    return await apiClient.get<Array<TableProject>>(routes.user)
+export async function getAllProjectsForAdmin(query?:ProjectSearch) {
+   const search = formatParam(query)
+    return await apiClient.get<Array<TableProject>>(`${routes.admin}?${search}`);
+}
+
+export async function getAllUserProjects(query?: ProjectSearch) {
+    const search = formatParam(query)
+    return await apiClient.get<Array<TableProject>>(`${routes.user}?${search}`);
 }
 
 export async function getSingleProject(id: string) {

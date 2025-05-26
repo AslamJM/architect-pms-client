@@ -60,6 +60,13 @@ class ApiClient {
         }
         return this.request<TRes>(endpoint, options)
     }
+
+    async delete<TRes>(endpoint:string):Promise<TRes>{
+        const options: RequestInit = {
+            method: "DELETE",
+        }
+        return this.request<TRes>(endpoint,options)
+    }
 }
 
 const API_URL = import.meta.env.VITE_API_URL

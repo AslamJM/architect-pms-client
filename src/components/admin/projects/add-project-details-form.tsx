@@ -12,7 +12,7 @@ import { Form } from '@/components/ui/form'
 import { useUsers } from '@/hooks/use-users'
 import { createProjectDetailsSchema, projectDetailsDV } from '@/schema/project'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useAdminProjects } from '@/hooks/admin/use-admin-projects'
+import { useRecentProjectsAdmin } from '@/hooks/admin/use-admin-projects'
 
 export default function AddProjectDetailsForm() {
   const form = useForm<CreateProjectDetailsInput>({
@@ -20,7 +20,7 @@ export default function AddProjectDetailsForm() {
     defaultValues: projectDetailsDV,
   })
   const { isLoading, data } = useUsers()
-  const { invalidate } = useAdminProjects()
+  const { invalidate } = useRecentProjectsAdmin()
 
   const { mutate, isPending } = useMutation({
     mutationFn: createProject,

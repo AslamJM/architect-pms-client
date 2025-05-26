@@ -53,5 +53,6 @@ export const useSingleProject = (id: string) => {
         qc.setQueryData(queryKey, newData)
     }
 
+
     return { data, isLoading,invalidate,addNewTaskToProject,removeTaskFromProject,updateTaskInProject,updateProject }   
  }

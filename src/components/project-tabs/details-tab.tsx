@@ -2,6 +2,7 @@ import { format } from 'date-fns'
 import { Card, CardContent } from '../ui/card'
 import ProjectCompleted from '../project/project-completed'
 import EditProjectProperty from '../dialogs/edit-project-property'
+import ProjectCompleteButton from '../project/complete-btn'
 import { useProjectId } from '@/hooks/use-project-id'
 import { useSingleProject } from '@/hooks/use-single-project'
 import { useAbilty } from '@/hooks/use-ability'
@@ -67,13 +68,19 @@ export default function DetailsTab() {
                 </p>
               </div>
               <div>
-                <h6 className="font-semibold mb-1">Completed</h6>
+                <div className="flex items-center gap-4">
+                  <h6 className="font-semibold mb-1">Completed</h6>
+                  <ProjectCompleteButton name="is_completed" />
+                </div>
                 <p className="text-sm text-muted-foreground">
                   <ProjectCompleted isCompleted={data.is_completed} />
                 </p>
               </div>
               <div>
-                <h6 className="font-semibold mb-1">Paid</h6>
+                <div className="flex items-center gap-4">
+                  <h6 className="font-semibold mb-1">Paid</h6>
+                  <ProjectCompleteButton name="is_paid" />
+                </div>
                 <p className="text-sm text-muted-foreground">
                   <ProjectCompleted isCompleted={data.is_paid} />
                 </p>

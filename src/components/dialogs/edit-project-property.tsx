@@ -15,6 +15,7 @@ import {
 import { Form } from '../ui/form'
 import FormText from '../form/form-text'
 import FormTextArea from '../form/form-text-area'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 import { updateProject } from '@/api/project'
 import { useProjectId } from '@/hooks/use-project-id'
 import { useSingleProject } from '@/hooks/use-single-project'
@@ -60,9 +61,16 @@ export default function EditProjectProperty({ propertyName, value }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Button variant="ghost" size="icon">
-          <Edit2 className="w-4 h-4" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button variant="ghost" size="icon">
+              <Edit2 className="w-4 h-4 text-orange-500" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Edit this section</p>
+          </TooltipContent>
+        </Tooltip>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
