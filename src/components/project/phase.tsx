@@ -1,4 +1,5 @@
 import { Badge } from '../ui/badge'
+import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import UploadedFiles from './uploaded-files'
@@ -12,9 +13,13 @@ export default function ProjectPhase({ phase_number }: Props) {
   return (
     <Card>
       <CardContent className="px-8">
-        <Badge className="mb-2">
-          Phase - {phase_number.toString().padStart(2, '0')}
-        </Badge>
+        <div className="flex items-center justify-between mb-4">
+          <Badge className="bg-teal-800">
+            Phase - {phase_number.toString().padStart(2, '0')}
+          </Badge>
+          <Button>Verify Work</Button>
+        </div>
+
         <Tabs defaultValue="uploaded">
           <TabsList className="w-full">
             <TabsTrigger value="uploaded">Uploaded Files</TabsTrigger>
