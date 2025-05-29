@@ -1,15 +1,16 @@
 import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
 import { Card, CardContent } from '../ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import UploadedFiles from './uploaded-files'
+import VerifyPhase from './verify-phase'
 import WorkingsFiles from './working-files'
 
 type Props = {
   phase_number: number
+  verified: boolean
 }
 
-export default function ProjectPhase({ phase_number }: Props) {
+export default function ProjectPhase({ phase_number, verified }: Props) {
   return (
     <Card>
       <CardContent className="px-8">
@@ -17,7 +18,7 @@ export default function ProjectPhase({ phase_number }: Props) {
           <Badge className="bg-teal-800">
             Phase - {phase_number.toString().padStart(2, '0')}
           </Badge>
-          <Button>Verify Work</Button>
+          <VerifyPhase phase_number={phase_number} verified={verified} />
         </div>
 
         <Tabs defaultValue="uploaded">

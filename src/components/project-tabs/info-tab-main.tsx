@@ -1,13 +1,8 @@
 import GenericTaskTab from './gen-task-tab'
 import DetailsTab from './details-tab'
-import { useProjectId } from '@/hooks/use-project-id'
-import { useSingleProject } from '@/hooks/use-single-project'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 export default function InfoTabsMain() {
-  const id = useProjectId()
-  const { data } = useSingleProject(id)
-
   return (
     <Tabs defaultValue="details" className="w-full">
       <TabsList className="w-full">
@@ -19,7 +14,9 @@ export default function InfoTabsMain() {
         <TabsTrigger value="items-remove">Items to Remove</TabsTrigger>
         <TabsTrigger value="inspirations">Inspirations</TabsTrigger>
       </TabsList>
-      <TabsContent value="details">{data && <DetailsTab />}</TabsContent>
+      <TabsContent value="details">
+        <DetailsTab />
+      </TabsContent>
       <TabsContent value="priority">
         <GenericTaskTab type="PRIORITY" />
       </TabsContent>

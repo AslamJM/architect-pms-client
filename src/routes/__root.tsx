@@ -5,7 +5,6 @@ import TanStackQueryLayout from '../integrations/tanstack-query/layout'
 
 import type { QueryClient } from '@tanstack/react-query'
 import type { Me } from '@/types/user'
-import { TooltipProvider } from '@/components/ui/tooltip'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -16,11 +15,9 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <>
-      <TooltipProvider>
-        <Outlet />
-        <TanStackRouterDevtools />
-        <TanStackQueryLayout />
-      </TooltipProvider>
+      <Outlet />
+      <TanStackRouterDevtools />
+      <TanStackQueryLayout />
     </>
   ),
 })

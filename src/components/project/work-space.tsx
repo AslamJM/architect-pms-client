@@ -19,7 +19,11 @@ export default function WorkSpace() {
       )}
       <div className="space-y-4">
         {data.phases.map((ph) => (
-          <ProjectPhase key={ph.phase_number} phase_number={ph.phase_number} />
+          <ProjectPhase
+            key={ph.phase_number}
+            phase_number={ph.phase_number}
+            verified={ph.verified}
+          />
         ))}
       </div>
       {canAddTasks && <AddPhaseToProject next_phase={data.phases.length + 1} />}

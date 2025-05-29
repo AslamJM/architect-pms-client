@@ -8,7 +8,9 @@ const routes = {
     admin: "/projects/admin",
     pm:"/projects/pm",
     user:"/projects/user",
-    task:"/projects/task"
+    task:"/projects/task",
+    count:"/projects/count",
+    verify: (projectId: string, phase: number) => `/projects/${projectId}/verify-phase/${phase}`,
 }
 
 export async function createProject(input: CreateProjectDetailsInput) {
@@ -36,6 +38,11 @@ export async function getAllProjectsForAdmin(query?:ProjectSearch) {
 export async function getAllUserProjects(query?: ProjectSearch) {
     const search = formatParam(query)
     return await apiClient.get<Array<TableProject>>(`${routes.user}?${search}`);
+}
+
+export async function getAllPMProjects(query?: ProjectSearch) {
+    const search = formatParam(query)
+    return await apiClient.get<Array<TableProject>>(`${routes.pm}?${search}`);
 }
 
 export async function getSingleProject(id: string) {
@@ -68,3 +75,18 @@ export async function updateTask({ id, data }: {
 }) {
     return await apiClient.patch<{ success: true }>(`${routes.task}/${id}`, data)
 }
+
+export async function projectCounts() {
+    return await apiClient.get<number>(routes.count);
+}
+
+export async function verifyPhase(input:{
+    projectId: string
+     phase: number
+     verified: boolean
+}) {
+    return await apiClient.post<{ verified: boolean }, { success: boolean }>(
+        routes.verify(input.projectId, input.phase),
+        { verified: input.verified }
+    );
+ }

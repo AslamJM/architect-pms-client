@@ -1,17 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { validateSearch } from '../admin/projects.index'
-import { useUserProjects } from '@/hooks/user/use-user-projects'
 import ProjectsSkeleton from '@/components/skeletons/projects-skeleton'
-import ProjectCard from '@/components/project/project-card'
 import ProjectsPagination from '@/components/projects-pagination'
+import ProjectCard from '@/components/project/project-card'
+import { usePMProjects } from '@/hooks/pm/use-pm-projects'
 
-export const Route = createFileRoute('/_auth/dashboard/user/')({
+export const Route = createFileRoute('/_auth/dashboard/pm/projects/')({
   component: RouteComponent,
   validateSearch: validateSearch,
 })
 
 function RouteComponent() {
-  const { data, isLoading } = useUserProjects()
+  const { data, isLoading } = usePMProjects()
   const navigate = Route.useNavigate()
 
   const setPage = (page: number) => {

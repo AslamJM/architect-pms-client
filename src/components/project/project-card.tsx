@@ -17,7 +17,7 @@ type Props = {
 
 export default function ProjectCard({ project }: Props) {
   const navigate = useNavigate()
-  const { isAdmin } = useAbilty()
+  const { isAdmin, isPM } = useAbilty()
 
   return (
     <Card
@@ -26,7 +26,9 @@ export default function ProjectCard({ project }: Props) {
         navigate({
           to: isAdmin
             ? '/dashboard/admin/projects/$id'
-            : '/dashboard/user/projects/$id',
+            : isPM
+              ? '/dashboard/pm/projects/$id'
+              : '/dashboard/user/projects/$id',
           params: { id: project.id },
         })
       }

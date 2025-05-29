@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
 import { Checkbox } from '../ui/checkbox'
 import { SelectSeparator } from '../ui/select'
+import DeleteTaskDg from '../dialogs/delete-task-dialog'
+import EditTaskDescription from '../dialogs/edit-task-description'
 import type { Task } from '@/types/project'
 import { useAbilty } from '@/hooks/use-ability'
 import { updateTask } from '@/api/project'
@@ -19,7 +21,7 @@ export default function SingleTask({ task }: Props) {
   const { mutate, isPending } = useMutation({
     mutationFn: updateTask,
     onSuccess: () => {
-      updateTaskInProject({ completed: !task.completed })
+      updateTaskInProject({ id: task.id, completed: !task.completed })
     },
   })
 
@@ -42,6 +44,12 @@ export default function SingleTask({ task }: Props) {
           className="cursor-pointer"
         />
         <p className="text-sm text-muted-foreground">{task.content}</p>
+        {!isUser && (
+          <div className="flex items-center gap-2">
+            <EditTaskDescription taskId={task.id} content={task.content} />
+            <DeleteTaskDg />
+          </div>
+        )}
       </div>
       <div className="flex gap-2">
         {task.images.map((im) => (

@@ -6,6 +6,7 @@ import ProjectCard from '@/components/project/project-card'
 import ProjectsSkeleton from '@/components/skeletons/projects-skeleton'
 import { Input } from '@/components/ui/input'
 import UserFilter from '@/components/filters/user-filter'
+import ProjectsPagination from '@/components/projects-pagination'
 
 export type ProjectSearch = {
   page?: number
@@ -17,10 +18,10 @@ export const validateSearch = (
   search: Record<string, unknown>,
 ): ProjectSearch => {
   return {
-    page: typeof search.page === 'string' ? parseInt(search.page) : undefined,
+    page: search.page ? Number(search.page) : undefined,
     name: typeof search.name === 'string' ? search.name : undefined,
     assigned_to:
-      typeof search.assing_to === 'string' ? search.assing_to : undefined,
+      typeof search.assigned_to === 'string' ? search.assigned_to : undefined,
   }
 }
 
@@ -35,12 +36,22 @@ function RouteComponent() {
 
   const setAssignedTo = (id: string | undefined) => {
     navigate({
-      search: (prev) => ({ ...prev, assigned_to: id }),
+      search: (prev) => {
+        return { ...prev, assigned_to: id }
+      },
+    })
+  }
+
+  const setPage = (page: number) => {
+    navigate({
+      search: (prev) => {
+        return { ...prev, page: page }
+      },
     })
   }
 
   return (
-    <div className="space-y-6 p-8">
+    <div className="space-y-4 p-8">
       <div className="flex item-center gap-8">
         <div className="flex items-center space-x-2">
           <BookImageIcon className="w-6 h-6 text-teal-700" />{' '}
@@ -89,6 +100,7 @@ function RouteComponent() {
           </div>
         )}
       </div>
+      <ProjectsPagination setPage={setPage} />
     </div>
   )
 }

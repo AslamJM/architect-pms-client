@@ -7,6 +7,7 @@ import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 import AuthProvider from './integrations/context/auth-context.tsx'
 import App from './app.tsx'
+import { TooltipProvider } from './components/ui/tooltip.tsx'
 
 // Render the app
 const rootElement = document.getElementById('app')
@@ -16,7 +17,9 @@ if (rootElement && !rootElement.innerHTML) {
     <StrictMode>
       <AuthProvider>
         <TanStackQueryProvider.Provider>
-          <App />
+          <TooltipProvider>
+            <App />
+          </TooltipProvider>
         </TanStackQueryProvider.Provider>
       </AuthProvider>
     </StrictMode>,
