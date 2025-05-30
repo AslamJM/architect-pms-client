@@ -44,6 +44,17 @@ export const useSingleProject = (id: string) => {
         qc.setQueryData(queryKey, newData)
     }
 
+    const removeTaskImage  = (taskId:string,imageId:number) => {
+        if (!data) return 
+        const task = data.tasks.find(t=>t.id===taskId)
+        if(task) {
+            task.images = task.images.filter(im=>im.id!==imageId)
+            updateTaskInProject(task)
+        }
+
+    }
+
+
     const updateProject = (update: Partial<typeof data>) => {
         if (!data) return
         const newData = {
@@ -54,5 +65,9 @@ export const useSingleProject = (id: string) => {
     }
 
 
-    return { data, isLoading,invalidate,addNewTaskToProject,removeTaskFromProject,updateTaskInProject,updateProject }   
+    return { 
+        data, isLoading,invalidate,addNewTaskToProject
+        ,removeTaskFromProject,updateTaskInProject,updateProject,
+        removeTaskImage
+     }   
  }

@@ -70,7 +70,7 @@ export default function DetailsTab() {
               <div>
                 <div className="flex items-center gap-4">
                   <h6 className="font-semibold mb-1">Completed</h6>
-                  <ProjectCompleteButton name="is_completed" />
+                  {canAddTasks && <ProjectCompleteButton name="is_completed" />}
                 </div>
                 <p className="text-sm text-muted-foreground">
                   <ProjectCompleted isCompleted={data.is_completed} />
@@ -79,7 +79,7 @@ export default function DetailsTab() {
               <div>
                 <div className="flex items-center gap-4">
                   <h6 className="font-semibold mb-1">Paid</h6>
-                  <ProjectCompleteButton name="is_paid" />
+                  {canAddTasks && <ProjectCompleteButton name="is_paid" />}
                 </div>
                 <p className="text-sm text-muted-foreground">
                   <ProjectCompleted isCompleted={data.is_paid} />

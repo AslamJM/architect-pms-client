@@ -10,6 +10,7 @@ const routes = {
     user:"/projects/user",
     task:"/projects/task",
     count:"/projects/count",
+    image:"/projects/task-image",
     verify: (projectId: string, phase: number) => `/projects/${projectId}/verify-phase/${phase}`,
 }
 
@@ -76,6 +77,10 @@ export async function updateTask({ id, data }: {
     return await apiClient.patch<{ success: true }>(`${routes.task}/${id}`, data)
 }
 
+export async function deleteTask(id:string) {
+    return apiClient.delete<{ success: true }>(`${routes.task}/${id}`)
+}
+
 export async function projectCounts() {
     return await apiClient.get<number>(routes.count);
 }
@@ -89,4 +94,8 @@ export async function verifyPhase(input:{
         routes.verify(input.projectId, input.phase),
         { verified: input.verified }
     );
+ }
+
+ export async function deleteTaskImage(id:number) {
+     return apiClient.delete<{ success: true }>(`${routes.image}/${id}`)
  }

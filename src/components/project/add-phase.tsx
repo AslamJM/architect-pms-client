@@ -8,7 +8,8 @@ import DropzoneField from './dropzone-field'
 import { useProjectId } from '@/hooks/use-project-id'
 import { useSingleProject } from '@/hooks/use-single-project'
 import { addPhase } from '@/api/project'
-import { createMockUrl, getFileNameFromUrl } from '@/lib/mock'
+import { getFileNameFromUrl } from '@/lib/mock'
+import { uploadFilesToServer } from '@/api/uploads'
 
 type Props = {
   next_phase: number
@@ -22,11 +23,15 @@ export default function AddPhaseToProject({ next_phase }: Props) {
   const { invalidate } = useSingleProject(id)
 
   const onDrop = async (acceptedFiles: Array<File>) => {
+    const data = new FormData()
+
+    acceptedFiles.forEach((f) => {
+      data.append('files', f)
+    })
+
     // mock image upload
     // !TODO connect to backend upload to S3
-    const uploadedUrls = acceptedFiles.map((file) => {
-      return createMockUrl(file.name, 'UPLOADED_FILES', id)
-    })
+    const uploadedUrls = await uploadFilesToServer(data)
 
     setUrls((prev) => [...prev, ...uploadedUrls])
   }

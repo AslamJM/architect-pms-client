@@ -3,6 +3,8 @@ import { Checkbox } from '../ui/checkbox'
 import { SelectSeparator } from '../ui/select'
 import DeleteTaskDg from '../dialogs/delete-task-dialog'
 import EditTaskDescription from '../dialogs/edit-task-description'
+import SingleTaskImage from './task-image-single'
+import AddMoreImagesToTask from './add-more-images'
 import type { Task } from '@/types/project'
 import { useAbilty } from '@/hooks/use-ability'
 import { updateTask } from '@/api/project'
@@ -47,18 +49,15 @@ export default function SingleTask({ task }: Props) {
         {!isUser && (
           <div className="flex items-center gap-2">
             <EditTaskDescription taskId={task.id} content={task.content} />
-            <DeleteTaskDg />
+            <DeleteTaskDg taskId={task.id} />
           </div>
         )}
       </div>
       <div className="flex gap-2">
         {task.images.map((im) => (
-          <img
-            src={im.url}
-            key={im.id}
-            className="w-[100px] h-[100px] object-cover rounded"
-          />
+          <SingleTaskImage image={im} key={im.id} taskId={task.id} />
         ))}
+        <AddMoreImagesToTask />
       </div>
       <SelectSeparator />
     </div>

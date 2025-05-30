@@ -32,3 +32,18 @@ export async function multiPartFormDataUploads(data:FormData) {
 
        throw new Error(`error uploading data`)
 }
+
+export async function uploadFilesToServer(data: FormData) {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/uploads/project-files`, {
+        method: "POST",
+        body: data,
+        credentials: "include"
+    })
+
+    if (response.ok) {
+        const urls = await response.json() as Array<string>
+        return urls
+    }
+
+    throw new Error(`error uploading data`)
+}
