@@ -63,3 +63,11 @@ export type TableProject = {
     is_paid: boolean
     created_at: Date
 }
+
+export type RecentUpload = {
+    project_id: string;
+    project_name: string;
+    uploaded_by: string;
+    uploaded_at: Date;
+    type: UploadType
+}
