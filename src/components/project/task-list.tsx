@@ -12,13 +12,17 @@ export default function TaskList({ type }: Props) {
   const id = useProjectId()
   const { data } = useSingleProject(id)
 
+  const tasks = data && data.tasks.filter((t) => t.type === type)
+
   return (
     <Card>
       <CardContent className="space-y-4">
-        {data &&
-          data.tasks
-            .filter((t) => t.type === type)
-            .map((task) => <SingleTask key={task.id} task={task} />)}
+        {tasks && tasks.length === 0 && (
+          <div className="text-sm text-muted-foreground">
+            No details were provided.
+          </div>
+        )}
+        {tasks && tasks.map((task) => <SingleTask key={task.id} task={task} />)}
       </CardContent>
     </Card>
   )

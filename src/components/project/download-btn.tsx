@@ -1,6 +1,7 @@
 import { DownloadIcon } from 'lucide-react'
 import { Button } from '../ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import { getFileNameFromUrl } from '@/lib/mock'
 
 type Props = {
   url: string
@@ -8,8 +9,12 @@ type Props = {
 
 export default function DownloadButton({ url }: Props) {
   const onDownload = () => {
-    // !TODO implent the download
-    console.log(url)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = getFileNameFromUrl(url) || ''
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
   }
 
   return (

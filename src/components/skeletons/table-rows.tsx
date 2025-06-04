@@ -10,8 +10,8 @@ export default function TableRowsSkeleton({ cols }: Props) {
     <>
       {Array.from({ length: 5 }).map((_, index) => (
         <TableRow key={`rowsk-${index}`}>
-          {Array.from({ length: cols }).map((_, index) => (
-            <TableCell key={`cellsk-${index}`}>
+          {Array.from({ length: cols }).map((_, i) => (
+            <TableCell key={`cellsk-${i}`}>
               <Skeleton className="h-[30px] w-full" />
             </TableCell>
           ))}

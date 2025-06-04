@@ -11,9 +11,11 @@ type Props = {
 
 export default function CountCard({ name, count, loading, Icon }: Props) {
   return (
-    <Card className="w-1/3">
+    <Card className="w-1/3 h-[150px]">
       <CardContent className="flex flex-col gap-2 items-center justify-center">
-        <Icon className="text-teal-800" />
+        <div className="p-2 rounded-full bg-teal-200">
+          <Icon className="text-teal-800" />
+        </div>
         <h4 className="text-sm text-muted-foreground  tracking-wide">{name}</h4>
         {loading ? (
           <Loader2 className="animate-spin text-muted-foreground" />

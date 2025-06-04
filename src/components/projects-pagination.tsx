@@ -17,7 +17,7 @@ type Props = {
 export default function ProjectsPagination({ setPage }: Props) {
   const [current, setCurrent] = useState(1)
 
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ['project-counts'],
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -25,7 +25,7 @@ export default function ProjectsPagination({ setPage }: Props) {
     queryFn: projectCounts,
   })
 
-  const pages = Math.ceil((data || 0) / 10)
+  const pages = Math.ceil((data || 0) / 12)
 
   return (
     <Pagination>
