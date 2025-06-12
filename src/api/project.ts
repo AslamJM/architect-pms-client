@@ -99,3 +99,7 @@ export async function verifyPhase(input:{
  export async function deleteTaskImage(id:number) {
      return apiClient.delete<{ success: true }>(`${routes.image}/${id}`)
  }
+
+export function addMoreImages(input: { taskId: string, urls: Array<string> }) {
+     return apiClient.post < { urls: Array<string> },{ success: true }>(`${routes.task}/${input.taskId}/images`,{urls:input.urls})
+ }

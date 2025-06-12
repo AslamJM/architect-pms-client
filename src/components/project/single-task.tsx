@@ -16,7 +16,7 @@ type Props = {
 }
 
 export default function SingleTask({ task }: Props) {
-  const { isUser } = useAbilty()
+  const { isUser, canAddTasks } = useAbilty()
   const projectId = useProjectId()
   const { updateTaskInProject } = useSingleProject(projectId)
 
@@ -57,7 +57,7 @@ export default function SingleTask({ task }: Props) {
         {task.images.map((im) => (
           <SingleTaskImage image={im} key={im.id} taskId={task.id} />
         ))}
-        <AddMoreImagesToTask />
+        {canAddTasks && <AddMoreImagesToTask taskId={task.id} />}
       </div>
       <SelectSeparator />
     </div>

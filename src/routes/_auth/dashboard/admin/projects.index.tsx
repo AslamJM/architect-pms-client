@@ -1,5 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { BookImageIcon, ChevronRight } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { useAdminProjects } from '@/hooks/admin/use-admin-projects'
 import ProjectCard from '@/components/project/project-card'
@@ -7,6 +8,7 @@ import ProjectsSkeleton from '@/components/skeletons/projects-skeleton'
 import { Input } from '@/components/ui/input'
 import UserFilter from '@/components/filters/user-filter'
 import ProjectsPagination from '@/components/projects-pagination'
+import { useDebounce } from '@/hooks/use-debounce-value'
 
 export type ProjectSearch = {
   page?: number
@@ -31,8 +33,12 @@ export const Route = createFileRoute('/_auth/dashboard/admin/projects/')({
 })
 
 function RouteComponent() {
+  const [search, setSearch] = useState('')
+
   const { data, isLoading, error } = useAdminProjects()
   const navigate = Route.useNavigate()
+
+  const { debounced } = useDebounce(search)
 
   const setAssignedTo = (id: string | undefined) => {
     navigate({
@@ -49,6 +55,12 @@ function RouteComponent() {
       },
     })
   }
+
+  useEffect(() => {
+    navigate({
+      search: (prev) => ({ ...prev, name: debounced }),
+    })
+  }, [debounced])
 
   return (
     <div className="space-y-4 p-8">
@@ -70,11 +82,8 @@ function RouteComponent() {
           <div>
             <Input
               placeholder="search project name"
-              onChange={(e) =>
-                navigate({
-                  search: (prev) => ({ ...prev, name: e.target.value }),
-                })
-              }
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
             />
           </div>
           <UserFilter setAssignedTo={setAssignedTo} />

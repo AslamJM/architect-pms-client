@@ -17,3 +17,4 @@ export async function createUser(input: CreateUserInput) {
 export async function updateUser(id: string, input: Partial<CreateUserInput>) {
     return await apiClient.patch(`${routes.base}/${id}`, input)
 }
+

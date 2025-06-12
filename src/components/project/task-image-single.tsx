@@ -32,12 +32,12 @@ export default function SingleTaskImage({ image, taskId }: Props) {
         className="w-[130px] h-[100px] object-cover rounded"
       />
       <div className="absolute top-0 right-0 p-1 z-10 flex items-center gap-2">
-        <Button className="rounded-full w-6 h-6">
+        <Button className="rounded-full w-6 h-6 cursor-pointer bg-teal-600 hover:bg-teal-800">
           <Maximize2Icon className="w-4 h-4" />
         </Button>
         {canAddTasks && (
           <Button
-            className="rounded-full w-6 h-6"
+            className="rounded-full w-6 h-6 cursor-pointer bg-teal-600 hover:bg-teal-800"
             disabled={isPending}
             onClick={() => mutate(image.id)}
           >

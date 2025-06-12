@@ -1,10 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 import { validateSearch } from '../admin/projects.index'
 import { useUserProjects } from '@/hooks/user/use-user-projects'
 import ProjectsSkeleton from '@/components/skeletons/projects-skeleton'
 import ProjectCard from '@/components/project/project-card'
 import ProjectsPagination from '@/components/projects-pagination'
 import { Input } from '@/components/ui/input'
+import { useDebounce } from '@/hooks/use-debounce-value'
 
 export const Route = createFileRoute('/_auth/dashboard/user/')({
   component: RouteComponent,
@@ -12,6 +14,7 @@ export const Route = createFileRoute('/_auth/dashboard/user/')({
 })
 
 function RouteComponent() {
+  const [search, setSearch] = useState('')
   const { data, isLoading } = useUserProjects()
   const navigate = Route.useNavigate()
 
@@ -19,9 +22,11 @@ function RouteComponent() {
     navigate({ search: (prev) => ({ ...prev, page }) })
   }
 
-  const setSearch = (name: string) => {
-    navigate({ search: (prev) => ({ ...prev, name }) })
-  }
+  const { debounced } = useDebounce(search)
+
+  useEffect(() => {
+    navigate({ search: (prev) => ({ ...prev, name: debounced }) })
+  }, [])
 
   return (
     <div className="space-y-4 p-8">
